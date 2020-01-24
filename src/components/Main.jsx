@@ -78,12 +78,12 @@ const VisibleCheckbox = styled.div`
   margin-left: 20px;
   margin-right: 10px;
   border: 1px solid;
-  border-color: ${checked => (checked ? '#2196f3' : '#9abbce')};
+  border-color: ${props => (props.checked ? '#2196f3' : '#9abbce')};
   border-radius: 2px;
 `;
 
 const Icon = styled.svg`
-  fill: ${checked => (checked ? '#2196f3' : 'transparent')};
+  fill: ${props => (props.checked ? '#2196f3' : 'transparent')};
 `;
 
 const OPTIONS = [
@@ -112,15 +112,28 @@ const OPTIONS = [
 class Main extends Component {
   state = {
     checkedOptions: { withoutStops: false, oneStop: true, twoStops: false, threeStops: false },
-    // checkedAllOptions: false,
+    checkedAllOptions: false,
   };
 
-  // handleAllChecked = event => {};
+  handleAllChecked = () => {
+    this.setState(prevState => ({
+      checkedAllOptions: !prevState.checkedAllOptions,
+    }));
+  };
 
-  // handleChange = event => {};
+  handleChange = event => {
+    const { name } = event.target;
+
+    this.setState(prevState => ({
+      checkedOptions: {
+        ...prevState.checkedOptions,
+        [name]: !prevState.checkedOptions[name],
+      },
+    }));
+  };
 
   render() {
-    const { checkedOptions } = this.state;
+    const { checkedOptions, checkedAllOptions } = this.state;
     return (
       <StyledMain>
         <SideBar>
@@ -129,9 +142,9 @@ class Main extends Component {
             <Form>
               <Options>
                 <Label>
-                  <HiddenCheckbox onChange={this.handleAllChecked} />
-                  <VisibleCheckbox>
-                    <Icon width="12" height="8" viewBox="0 0 12 8">
+                  <HiddenCheckbox checked={checkedAllOptions} onChange={this.handleAllChecked} />
+                  <VisibleCheckbox checked={checkedAllOptions}>
+                    <Icon width="12" height="8" viewBox="0 0 12 8" checked={checkedAllOptions}>
                       <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
                     </Icon>
                   </VisibleCheckbox>
