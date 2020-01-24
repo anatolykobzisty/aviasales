@@ -148,15 +148,15 @@ class Main extends Component {
                   <Label>
                     <HiddenCheckbox
                       name="all"
-                      checked={checkedOptions.length >= OPTIONS.length}
+                      checked={checkedOptions.length === OPTIONS.length}
                       onChange={this.handleChangeAllOptions}
                     />
-                    <VisibleCheckbox checked={checkedOptions.length >= OPTIONS.length}>
+                    <VisibleCheckbox checked={checkedOptions.length === OPTIONS.length}>
                       <Icon
                         width="12"
                         height="8"
                         viewBox="0 0 12 8"
-                        checked={checkedOptions.length >= OPTIONS.length}
+                        checked={checkedOptions.length === OPTIONS.length}
                       >
                         <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
                       </Icon>
