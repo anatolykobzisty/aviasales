@@ -53,7 +53,6 @@ const Option = ({ label, name, checked, onChange }) => (
         </Icon>
       </VisibleCheckbox>
       {label}
-      {/* {console.log(checked)} */}
     </Label>
   </StyledOption>
 );

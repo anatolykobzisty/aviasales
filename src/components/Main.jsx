@@ -47,12 +47,48 @@ const Content = styled.div``;
 
 const Tickets = styled.ul``;
 
+const AllOptions = styled.li``;
+
+const Label = styled.label`
+  display: flex;
+  height: 40px;
+  align-items: center;
+  &:hover {
+    background-color: #f1fcff;
+  }
+`;
+
+const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+`;
+
+const VisibleCheckbox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 20px;
+  margin-right: 10px;
+  border: 1px solid;
+  border-color: ${props => (props.checked ? '#2196f3' : '#9abbce')};
+  border-radius: 2px;
+`;
+
+const Icon = styled.svg`
+  fill: ${props => (props.checked ? '#2196f3' : 'transparent')};
+`;
+
 const OPTIONS = [
-  {
-    name: 'all',
-    key: 'all',
-    label: 'Все',
-  },
   {
     name: 'withoutStops',
     key: 'withoutStops',
@@ -77,24 +113,26 @@ const OPTIONS = [
 
 class Main extends Component {
   state = {
-    checkedOptions: {
-      all: false,
-      withoutStops: false,
-      oneStop: true,
-      twoStops: false,
-      threeStops: false,
-    },
+    checkedOptions: ['oneStop'],
   };
 
-  handleChange = event => {
-    const { name } = event.target;
+  handleChangeOption = name => event => {
+    const { checked } = event.target;
+    const { checkedOptions } = this.state;
+    if (checked) {
+      this.setState({ checkedOptions: [...checkedOptions, name] });
+    } else {
+      this.setState({ checkedOptions: checkedOptions.filter(item => item !== name) });
+    }
+  };
 
-    this.setState(prevState => ({
-      checkedOptions: {
-        ...prevState.checkedOptions,
-        [name]: !prevState.checkedOptions[name],
-      },
-    }));
+  handleChangeAllOption = event => {
+    const { checked } = event.target;
+    if (checked) {
+      this.setState({ checkedOptions: ['withoutStops', 'oneStop', 'twoStops', 'threeStops'] });
+    } else {
+      this.setState({ checkedOptions: [] });
+    }
   };
 
   render() {
@@ -106,13 +144,33 @@ class Main extends Component {
             <Title>Количество пересадок</Title>
             <Form>
               <Options>
+                <AllOptions>
+                  <Label>
+                    <HiddenCheckbox
+                      name="all"
+                      checked={checkedOptions.length >= OPTIONS.length}
+                      onChange={this.handleChangeAllOption}
+                    />
+                    <VisibleCheckbox checked={checkedOptions.length >= OPTIONS.length}>
+                      <Icon
+                        width="12"
+                        height="8"
+                        viewBox="0 0 12 8"
+                        checked={checkedOptions.length >= OPTIONS.length}
+                      >
+                        <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
+                      </Icon>
+                    </VisibleCheckbox>
+                    Все
+                  </Label>
+                </AllOptions>
                 {OPTIONS.map(({ key, label, name }) => (
                   <Option
                     key={key}
                     label={label}
                     name={name}
-                    checked={checkedOptions[name]}
-                    onChange={this.handleChange}
+                    checked={checkedOptions.includes(name)}
+                    onChange={this.handleChangeOption(name)}
                   />
                 ))}
               </Options>
