@@ -126,7 +126,7 @@ class Main extends Component {
     }
   };
 
-  handleChangeAllOption = event => {
+  handleChangeAllOptions = event => {
     const { checked } = event.target;
     if (checked) {
       this.setState({ checkedOptions: ['withoutStops', 'oneStop', 'twoStops', 'threeStops'] });
@@ -149,7 +149,7 @@ class Main extends Component {
                     <HiddenCheckbox
                       name="all"
                       checked={checkedOptions.length >= OPTIONS.length}
-                      onChange={this.handleChangeAllOption}
+                      onChange={this.handleChangeAllOptions}
                     />
                     <VisibleCheckbox checked={checkedOptions.length >= OPTIONS.length}>
                       <Icon
