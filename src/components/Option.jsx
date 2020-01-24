@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 
 const StyledOption = styled.li``;
@@ -56,5 +57,12 @@ const Option = ({ label, name, checked, onChange }) => (
     </Label>
   </StyledOption>
 );
+
+Option.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default Option;

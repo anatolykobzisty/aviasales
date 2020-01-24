@@ -112,23 +112,15 @@ const OPTIONS = [
 class Main extends Component {
   state = {
     checkedOptions: { withoutStops: false, oneStop: true, twoStops: false, threeStops: false },
-    checkedAllOptions: false,
+    // checkedAllOptions: false,
   };
 
-  handleAllChecked = event => {};
+  // handleAllChecked = event => {};
 
-  handleChange = event => {
-    const { name } = event.target;
-    const { checkedOptions } = this.state;
-    if (checkedOptions.includes(name)) {
-      this.state({ checkedOptions: Object.values({ ...checkedOptions, name }) });
-    } else {
-      this.state({ checkedOptions: Object.values({ checkedOptions }) });
-    }
-  };
+  // handleChange = event => {};
 
   render() {
-    const { checkedOptions, checkedAllOptions } = this.state;
+    const { checkedOptions } = this.state;
     return (
       <StyledMain>
         <SideBar>
