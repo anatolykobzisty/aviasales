@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/macro';
+import axios from 'axios';
 
 import Option from './Option';
 import Tabs from './Tabs';
 import Ticket from './Ticket';
+import Loader from './Loader';
 
 const StyledMain = styled.main`
   display: flex;
@@ -41,18 +43,13 @@ const Form = styled.form`
 
 const Options = styled.ul``;
 
-const Container = styled.div``;
-
-const Content = styled.div``;
-
-const Tickets = styled.ul``;
-
 const AllOptions = styled.li``;
 
 const Label = styled.label`
   display: flex;
   height: 40px;
   align-items: center;
+  cursor: pointer;
   &:hover {
     background-color: #f1fcff;
   }
@@ -88,6 +85,12 @@ const Icon = styled.svg`
   fill: ${props => (props.checked ? '#2196f3' : 'transparent')};
 `;
 
+const Container = styled.div``;
+
+const Content = styled.div``;
+
+const Tickets = styled.ul``;
+
 const OPTIONS = [
   {
     name: 'withoutStops',
@@ -113,7 +116,33 @@ const OPTIONS = [
 
 class Main extends Component {
   state = {
+    tickets: [],
+    isLoading: true,
+    error: null,
     checkedOptions: ['oneStop'],
+    sortBy: 'cheapness',
+  };
+
+  componentDidMount() {
+    this.getTickets();
+  }
+
+  getTickets = async () => {
+    const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
+    const { searchId } = responseSearch.data;
+    const response = await axios.get(
+      `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
+    );
+    const { tickets } = response.data;
+
+    try {
+      this.setState({
+        tickets,
+        isLoading: false,
+      });
+    } catch (error) {
+      this.setState({ error, isLoading: false });
+    }
   };
 
   handleChangeOption = name => event => {
@@ -135,8 +164,13 @@ class Main extends Component {
     }
   };
 
+  handleChangeTabs = event => {
+    const { value } = event.target;
+    this.setState({ sortBy: value });
+  };
+
   render() {
-    const { checkedOptions } = this.state;
+    const { tickets, isLoading, error, checkedOptions, sortBy } = this.state;
     return (
       <StyledMain>
         <SideBar>
@@ -174,15 +208,29 @@ class Main extends Component {
                   />
                 ))}
               </Options>
-              {/* {console.log(checkedOptions.oneStop)} */}
             </Form>
           </Filter>
         </SideBar>
         <Container>
-          <Tabs />
+          <Tabs sortBy={sortBy} handleChangeTabs={this.handleChangeTabs} />
           <Content>
+            {error ? <p>{error.message}</p> : null}
             <Tickets>
-              <Ticket />
+              {!isLoading ? (
+                tickets.map(({ price, carrier, segments }) => (
+                  <Ticket
+                    key={Math.random()
+                      .toString(32)
+                      .substr(2)}
+                    price={price}
+                    carrier={carrier}
+                    segments={segments}
+                  />
+                ))
+              ) : (
+                <Loader />
+              )}
+              {/* {console.log(tickets)} */}
             </Tickets>
           </Content>
         </Container>

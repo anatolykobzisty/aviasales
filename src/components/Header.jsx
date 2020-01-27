@@ -4,6 +4,7 @@ import { ReactComponent as Logo } from '../img/logo.svg';
 
 const StyledHeader = styled.header`
   display: flex;
+  height: 160px;
   justify-content: center;
   align-items: center;
 `;

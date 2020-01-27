@@ -8,7 +8,8 @@ const Label = styled.label`
   display: flex;
   height: 40px;
   align-items: center;
-  &:hover {
+  cursor: pointer;
+  :hover {
     background-color: #f1fcff;
   }
 `;

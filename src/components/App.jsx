@@ -29,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
   
   body {
     font-family: "Open Sans SemiBold", sans-serif;
-    max-width: 960px;
+    max-width: 754px;
     min-height: 100%;
     padding: 0;
     margin-left: auto;
