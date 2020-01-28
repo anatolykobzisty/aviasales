@@ -6,9 +6,11 @@ import Option from './Option';
 import Tabs from './Tabs';
 import Ticket from './Ticket';
 import Loader from './Loader';
+import ErrorIndicator from './ErrorIndicator';
 
 const StyledMain = styled.main`
   display: flex;
+  height: 1090px;
 `;
 
 const SideBar = styled.aside``;
@@ -118,30 +120,37 @@ class Main extends Component {
   state = {
     tickets: [],
     isLoading: true,
-    error: null,
+    error: false,
     checkedOptions: ['oneStop'],
     sortBy: 'cheapness',
   };
 
   componentDidMount() {
-    this.getTickets();
+    this.getAllTickets();
   }
 
-  getTickets = async () => {
+  getSomeTickets = async () => {
     const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
     const { searchId } = responseSearch.data;
     const response = await axios.get(
       `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
     );
     const { tickets } = response.data;
+    this.setState({
+      tickets,
+      isLoading: false,
+      error: false,
+    });
+  };
 
+  getAllTickets = async () => {
     try {
+      await this.getSomeTickets();
+    } catch (error) {
       this.setState({
-        tickets,
+        error: true,
         isLoading: false,
       });
-    } catch (error) {
-      this.setState({ error, isLoading: false });
     }
   };
 
@@ -171,6 +180,9 @@ class Main extends Component {
 
   render() {
     const { tickets, isLoading, error, checkedOptions, sortBy } = this.state;
+    const hasData = !(isLoading || error);
+    const errorMessage = error ? <ErrorIndicator /> : null;
+    const loading = isLoading ? <Loader /> : null;
     return (
       <StyledMain>
         <SideBar>
@@ -214,24 +226,23 @@ class Main extends Component {
         <Container>
           <Tabs sortBy={sortBy} handleChangeTabs={this.handleChangeTabs} />
           <Content>
-            {error ? <p>{error.message}</p> : null}
             <Tickets>
-              {!isLoading ? (
-                tickets.map(({ price, carrier, segments }) => (
-                  <Ticket
-                    key={Math.random()
-                      .toString(32)
-                      .substr(2)}
-                    price={price}
-                    carrier={carrier}
-                    segments={segments}
-                  />
-                ))
-              ) : (
-                <Loader />
-              )}
+              {hasData
+                ? tickets.slice(0, 5).map(({ price, carrier, segments }) => (
+                    <Ticket
+                      key={Math.random()
+                        .toString(32)
+                        .substr(2)}
+                      price={price}
+                      carrier={carrier}
+                      segments={segments}
+                    />
+                  ))
+                : null}
               {/* {console.log(tickets)} */}
             </Tickets>
+            {loading}
+            {errorMessage}
           </Content>
         </Container>
       </StyledMain>
