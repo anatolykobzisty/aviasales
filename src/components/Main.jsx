@@ -129,29 +129,59 @@ class Main extends Component {
     this.getAllTickets();
   }
 
-  getSomeTickets = async () => {
-    const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
-    const { searchId } = responseSearch.data;
-    const response = await axios.get(
-      `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
-    );
-    const { tickets } = response.data;
-    this.setState({
-      tickets,
-      isLoading: false,
-      error: false,
-    });
-  };
+  // getSomeTickets = async () => {
+  //   const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
+  //   const { searchId } = responseSearch.data;
+  //   const response = await axios.get(
+  //     `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
+  //   );
+  //   const { tickets } = response.data;
+  //   this.setState({
+  //     tickets,
+  //     isLoading: false,
+  //     error: false,
+  //   });
+  // };
+
+  // getAllTickets = async () => {
+  //   try {
+  //     await this.getSomeTickets();
+  //   } catch (error) {
+  //     this.setState({
+  //       error: true,
+  //       isLoading: false,
+  //     });
+  //   }
+  // };
 
   getAllTickets = async () => {
-    try {
-      await this.getSomeTickets();
-    } catch (error) {
-      this.setState({
-        error: true,
-        isLoading: false,
-      });
-    }
+    const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
+    const { searchId } = responseSearch.data;
+
+    const getSomeTickets = async (stop = false) => {
+      if (stop) {
+        return;
+      }
+      const { tickets } = this.state;
+      let responsePartTickets;
+      let partTickets;
+      try {
+        responsePartTickets = await axios.get(
+          `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
+        );
+        partTickets = responsePartTickets.data.tickets;
+      } catch (err) {
+        this.setState({
+          error: true,
+          isLoading: false,
+        });
+        // getSomeTickets(false);
+        return;
+      }
+      this.setState({ tickets: [...tickets, ...partTickets], isLoading: false, error: false });
+      getSomeTickets(responsePartTickets.data.stop);
+    };
+    return getSomeTickets(false);
   };
 
   handleChangeOption = name => event => {
@@ -239,7 +269,7 @@ class Main extends Component {
                     />
                   ))
                 : null}
-              {/* {console.log(tickets)} */}
+              {console.log(tickets)}
             </Tickets>
             {loading}
             {errorMessage}
