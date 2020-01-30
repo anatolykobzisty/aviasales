@@ -44,10 +44,10 @@ const Icon = styled.svg`
   fill: ${props => (props.checked ? '#2196f3' : 'transparent')};
 `;
 
-const Option = ({ label, name, checked, onChange }) => (
+const Option = ({ label, value, checked, onChange }) => (
   <StyledOption>
     <Label>
-      <HiddenCheckbox name={name} checked={checked} onChange={onChange} />
+      <HiddenCheckbox value={value} checked={checked} onChange={onChange} />
       <VisibleCheckbox checked={checked}>
         <Icon width="12" height="8" viewBox="0 0 12 8" checked={checked}>
           <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
@@ -60,7 +60,7 @@ const Option = ({ label, name, checked, onChange }) => (
 
 Option.propTypes = {
   label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired,
   checked: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
 };

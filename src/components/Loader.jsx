@@ -8,11 +8,12 @@ const StyledLoading = styled.div`
 
 const Text = styled.h3`
   margin: 0;
+  margin-bottom: 20px;
 `;
 
 const Loader = () => (
   <StyledLoading>
-    <Text>Поиск билетов...</Text>
+    <Text>Загрузка билетов...</Text>
   </StyledLoading>
 );
 

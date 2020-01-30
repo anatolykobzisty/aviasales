@@ -6,7 +6,6 @@ import Option from './Option';
 import Tabs from './Tabs';
 import Ticket from './Ticket';
 import Loader from './Loader';
-import ErrorIndicator from './ErrorIndicator';
 
 const StyledMain = styled.main`
   display: flex;
@@ -52,7 +51,7 @@ const Label = styled.label`
   height: 40px;
   align-items: center;
   cursor: pointer;
-  &:hover {
+  :hover {
     background-color: #f1fcff;
   }
 `;
@@ -95,123 +94,128 @@ const Tickets = styled.ul``;
 
 const OPTIONS = [
   {
-    name: 'withoutStops',
     key: 'withoutStops',
+    value: 0,
     label: 'Без пересадок',
   },
   {
-    name: 'oneStop',
     key: 'oneStop',
+    value: 1,
     label: '1 пересадка',
   },
   {
-    name: 'twoStops',
     key: 'twoStops',
+    value: 2,
     label: '2 пересадки',
   },
   {
-    name: 'threeStops',
     key: 'threeStops',
+    value: 3,
     label: '3 пересадки',
   },
 ];
 
 class Main extends Component {
   state = {
-    tickets: [],
+    allTickets: [],
+    filteredTickets: [],
     isLoading: true,
-    error: false,
-    checkedOptions: ['oneStop'],
+    checkedOptions: [1],
     sortBy: 'cheapness',
   };
 
-  componentDidMount() {
-    this.getAllTickets();
+  async componentDidMount() {
+    const res = await axios.get('https://front-test.beta.aviasales.ru/search');
+    const { searchId } = res.data;
+    this.searchId = searchId;
+    this.getTickets(searchId);
   }
 
-  // getSomeTickets = async () => {
-  //   const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
-  //   const { searchId } = responseSearch.data;
-  //   const response = await axios.get(
-  //     `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
-  //   );
-  //   const { tickets } = response.data;
-  //   this.setState({
-  //     tickets,
-  //     isLoading: false,
-  //     error: false,
-  //   });
-  // };
+  componentWillUnmount() {
+    clearTimeout(this.timerId);
+  }
 
-  // getAllTickets = async () => {
-  //   try {
-  //     await this.getSomeTickets();
-  //   } catch (error) {
-  //     this.setState({
-  //       error: true,
-  //       isLoading: false,
-  //     });
-  //   }
-  // };
-
-  getAllTickets = async () => {
-    const responseSearch = await axios.get('https://front-test.beta.aviasales.ru/search');
-    const { searchId } = responseSearch.data;
-
-    const getSomeTickets = async (stop = false) => {
-      if (stop) {
-        return;
+  getTickets = async searchId => {
+    try {
+      const res = await axios.get('https://front-test.beta.aviasales.ru/tickets', {
+        params: { searchId },
+      });
+      const { stop, tickets } = res.data;
+      this.setState(
+        state => ({
+          ...state,
+          allTickets: [...state.allTickets, ...tickets],
+        }),
+        this.filterTickets
+      );
+      if (!stop) {
+        this.timerId = setTimeout(() => this.getTickets(searchId), 500);
+      } else {
+        this.setState({ isLoading: false });
       }
-      const { tickets } = this.state;
-      let responsePartTickets;
-      let partTickets;
-      try {
-        responsePartTickets = await axios.get(
-          `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
-        );
-        partTickets = responsePartTickets.data.tickets;
-      } catch (err) {
-        this.setState({
-          error: true,
-          isLoading: false,
-        });
-        // getSomeTickets(false);
-        return;
-      }
-      this.setState({ tickets: [...tickets, ...partTickets], isLoading: false, error: false });
-      getSomeTickets(responsePartTickets.data.stop);
-    };
-    return getSomeTickets(false);
+    } catch (error) {
+      this.getTickets(searchId);
+    }
   };
 
-  handleChangeOption = name => event => {
+  filterTickets = () => {
+    const { checkedOptions, allTickets } = this.state;
+    const filteredTickets = allTickets.filter(({ segments }) => {
+      return segments.every(({ stops }) => {
+        return checkedOptions.includes(stops.length);
+      });
+    });
+    this.setState({ filteredTickets }, this.sortTickets);
+  };
+
+  sortTickets = () => {
+    const { filteredTickets, sortBy } = this.state;
+    let sortedTickets = [];
+    if (sortBy === 'cheapness') {
+      sortedTickets = filteredTickets.sort((firstTicket, secondTicket) => {
+        return firstTicket.price - secondTicket.price;
+      });
+    } else {
+      sortedTickets = filteredTickets.sort((firstTicket, secondTicket) => {
+        const totalDurationFirstTicket =
+          firstTicket.segments[0].duration + firstTicket.segments[1].duration;
+        const totalDurationSecondTicket =
+          secondTicket.segments[0].duration + secondTicket.segments[1].duration;
+        return totalDurationFirstTicket - totalDurationSecondTicket;
+      });
+    }
+    this.setState({ filteredTickets: sortedTickets });
+  };
+
+  handleChangeOption = value => event => {
     const { checked } = event.target;
     const { checkedOptions } = this.state;
     if (checked) {
-      this.setState({ checkedOptions: [...checkedOptions, name] });
+      this.setState({ checkedOptions: [...checkedOptions, value] }, this.filterTickets);
     } else {
-      this.setState({ checkedOptions: checkedOptions.filter(item => item !== name) });
+      this.setState(
+        { checkedOptions: checkedOptions.filter(item => item !== value) },
+        this.filterTickets
+      );
     }
   };
 
   handleChangeAllOptions = event => {
     const { checked } = event.target;
     if (checked) {
-      this.setState({ checkedOptions: ['withoutStops', 'oneStop', 'twoStops', 'threeStops'] });
+      this.setState({ checkedOptions: [0, 1, 2, 3] }, this.filterTickets);
     } else {
-      this.setState({ checkedOptions: [] });
+      this.setState({ checkedOptions: [] }, this.filterTickets);
     }
   };
 
   handleChangeTabs = event => {
     const { value } = event.target;
-    this.setState({ sortBy: value });
+    this.setState({ sortBy: value }, this.sortTickets);
   };
 
   render() {
-    const { tickets, isLoading, error, checkedOptions, sortBy } = this.state;
-    const hasData = !(isLoading || error);
-    const errorMessage = error ? <ErrorIndicator /> : null;
+    const { filteredTickets, isLoading, checkedOptions, sortBy } = this.state;
     const loading = isLoading ? <Loader /> : null;
     return (
       <StyledMain>
@@ -240,13 +244,13 @@ class Main extends Component {
                     Все
                   </Label>
                 </AllOptions>
-                {OPTIONS.map(({ key, label, name }) => (
+                {OPTIONS.map(({ key, label, value }) => (
                   <Option
                     key={key}
                     label={label}
-                    name={name}
-                    checked={checkedOptions.includes(name)}
-                    onChange={this.handleChangeOption(name)}
+                    value={value}
+                    checked={checkedOptions.includes(value)}
+                    onChange={this.handleChangeOption(value)}
                   />
                 ))}
               </Options>
@@ -256,23 +260,19 @@ class Main extends Component {
         <Container>
           <Tabs sortBy={sortBy} handleChangeTabs={this.handleChangeTabs} />
           <Content>
-            <Tickets>
-              {hasData
-                ? tickets.slice(0, 5).map(({ price, carrier, segments }) => (
-                    <Ticket
-                      key={Math.random()
-                        .toString(32)
-                        .substr(2)}
-                      price={price}
-                      carrier={carrier}
-                      segments={segments}
-                    />
-                  ))
-                : null}
-              {console.log(tickets)}
-            </Tickets>
             {loading}
-            {errorMessage}
+            <Tickets>
+              {filteredTickets.slice(0, 5).map(({ price, carrier, segments }) => (
+                <Ticket
+                  key={Math.random()
+                    .toString(32)
+                    .substr(2)}
+                  price={price}
+                  carrier={carrier}
+                  segments={segments}
+                />
+              ))}
+            </Tickets>
           </Content>
         </Container>
       </StyledMain>
