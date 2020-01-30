@@ -78,7 +78,7 @@ class Ticket extends PureComponent {
           <Headline>
             <Price>{price.toLocaleString()} Р</Price>
             <Logo>
-              <img src={`http://pics.avs.io/110/36/${carrier}.png`} alt={carrier} />
+              <img src={`https://pics.avs.io/110/36/${carrier}.png`} alt={carrier} />
             </Logo>
           </Headline>
           {segments.map(({ origin, destination, date, stops, duration }) => {
