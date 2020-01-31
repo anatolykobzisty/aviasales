@@ -83,11 +83,7 @@ class Ticket extends PureComponent {
           </Headline>
           {segments.map(({ origin, destination, date, stops, duration }) => {
             return (
-              <Row
-                key={Math.random()
-                  .toString(32)
-                  .substr(2)}
-              >
+              <Row key={`${Date.parse(date)}`}>
                 <Column>
                   <Title>
                     {origin} – {destination}
@@ -107,6 +103,7 @@ class Ticket extends PureComponent {
                       : `${stops.length} ${stops.length === 1 ? 'пересадка' : 'пересадки'}`}
                   </Title>
                   <Text>{stops.join(',')}</Text>
+                  {console.log(`${Date.parse(date)}`)}
                 </Column>
               </Row>
             );

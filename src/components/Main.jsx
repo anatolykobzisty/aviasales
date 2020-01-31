@@ -264,9 +264,7 @@ class Main extends Component {
             <Tickets>
               {filteredTickets.slice(0, 5).map(({ price, carrier, segments }) => (
                 <Ticket
-                  key={Math.random()
-                    .toString(32)
-                    .substr(2)}
+                  key={`${price}-${carrier}-${segments[1].duration}`}
                   price={price}
                   carrier={carrier}
                   segments={segments}
