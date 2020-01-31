@@ -141,13 +141,8 @@ class Main extends Component {
         params: { searchId },
       });
       const { stop, tickets } = res.data;
-      this.setState(
-        state => ({
-          ...state,
-          allTickets: [...state.allTickets, ...tickets],
-        }),
-        this.filterTickets
-      );
+      const { allTickets } = this.state;
+      this.setState({ allTickets: [...allTickets, ...tickets] }, this.filterTickets);
       if (!stop) {
         this.timerId = setTimeout(() => this.getTickets(searchId), 500);
       } else {
