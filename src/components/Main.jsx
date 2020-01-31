@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import axios from 'axios';
 
 import Option from './Option';
-import Tabs from './Tabs';
+import SortControl from './SortControl';
 import Ticket from './Ticket';
 import Loader from './Loader';
 
@@ -209,9 +209,8 @@ class Main extends Component {
     }
   };
 
-  handleChangeTabs = event => {
-    const { value } = event.target;
-    this.setState({ sortBy: value }, this.sortTickets);
+  handleChangeSortControl = sortBy => () => {
+    this.setState({ sortBy }, this.sortTickets);
   };
 
   render() {
@@ -258,7 +257,7 @@ class Main extends Component {
           </Filter>
         </SideBar>
         <Container>
-          <Tabs sortBy={sortBy} handleChangeTabs={this.handleChangeTabs} />
+          <SortControl sortBy={sortBy} handleChangeSortControl={this.handleChangeSortControl} />
           <Content>
             {loading}
             <Tickets>

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 
-const StyledTabs = styled.div`
+const StyledSortControl = styled.div`
   width: 503px;
   margin-bottom: 20px;
 `;
@@ -26,30 +26,30 @@ const Button = styled.button`
   }
 `;
 
-const LeftTab = styled(Button)`
+const LeftButton = styled(Button)`
   border-radius: 5px 0 0 5px;
   border-right: 0px;
 `;
 
-const RightTab = styled(Button)`
+const RightButton = styled(Button)`
   border-radius: 0 5px 5px 0;
   border-left: 0px;
 `;
 
-const Tabs = ({ sortBy, handleChangeTabs }) => (
-  <StyledTabs>
-    <LeftTab active={sortBy === 'cheapness'} value="cheapness" onClick={handleChangeTabs}>
+const SortControl = ({ sortBy, handleChangeSortControl }) => (
+  <StyledSortControl>
+    <LeftButton active={sortBy === 'cheapness'} onClick={handleChangeSortControl('cheapness')}>
       Самый дешевый
-    </LeftTab>
-    <RightTab active={sortBy === 'speed'} value="speed" onClick={handleChangeTabs}>
+    </LeftButton>
+    <RightButton active={sortBy === 'speed'} onClick={handleChangeSortControl('speed')}>
       Самый быстрый
-    </RightTab>
-  </StyledTabs>
+    </RightButton>
+  </StyledSortControl>
 );
 
-Tabs.propTypes = {
+SortControl.propTypes = {
   sortBy: PropTypes.string.isRequired,
-  handleChangeTabs: PropTypes.func.isRequired,
+  handleChangeSortControl: PropTypes.func.isRequired,
 };
 
-export default Tabs;
+export default SortControl;

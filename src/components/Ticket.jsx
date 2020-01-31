@@ -103,7 +103,6 @@ class Ticket extends PureComponent {
                       : `${stops.length} ${stops.length === 1 ? 'пересадка' : 'пересадки'}`}
                   </Title>
                   <Text>{stops.join(',')}</Text>
-                  {console.log(`${Date.parse(date)}`)}
                 </Column>
               </Row>
             );
