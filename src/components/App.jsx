@@ -14,8 +14,16 @@ const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Open Sans';
     src: url(${OpenSansSemiBold});
+    font-display: swap;
+    font-weight: 600;          
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Open Sans';
     src: url(${OpenSansRegular});
     font-display: swap;
+    font-weight: normal;          
     font-style: normal;
   }
   
