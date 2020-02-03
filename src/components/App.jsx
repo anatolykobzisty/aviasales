@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
     src: url(${OpenSansSemiBold});
     font-display: swap;
     font-style: normal;
-    font-weight: 600;
   }
   
   @font-face {
@@ -24,11 +23,10 @@ const GlobalStyle = createGlobalStyle`
     src: url(${OpenSansRegular});
     font-display: swap;
     font-style: normal;
-    font-weight: normal;
   }
   
   body {
-    font-family: "Open Sans SemiBold", sans-serif;
+    font-family: 'Open Sans SemiBold';
     max-width: 754px;
     min-height: 100%;
     padding: 0;
