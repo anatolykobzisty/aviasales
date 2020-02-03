@@ -12,21 +12,16 @@ const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
 
   @font-face {
-    font-family: 'Open Sans SemiBold';
+    font-family: 'Open Sans';
     src: url(${OpenSansSemiBold});
-    font-display: swap;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: 'Open Sans Regular';
     src: url(${OpenSansRegular});
     font-display: swap;
     font-style: normal;
   }
   
   body {
-    font-family: 'Open Sans SemiBold';
+    font-family: 'Open Sans';
+    font-weight: 600;          
     max-width: 754px;
     min-height: 100%;
     padding: 0;

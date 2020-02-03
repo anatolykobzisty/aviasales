@@ -37,7 +37,8 @@ const Title = styled.h2`
 `;
 
 const Form = styled.form`
-  font-family: 'Open Sans Regular';
+  font-family: 'Open Sans';
+  font-weight: normal;
   font-size: 13px;
   line-height: 20px;
 `;
