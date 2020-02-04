@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/aviasales/static/js/main.dbdb5d6f.chunk.js",
-    "main.js.map": "/aviasales/static/js/main.dbdb5d6f.chunk.js.map",
+    "main.js": "/aviasales/static/js/main.454a7e1f.chunk.js",
+    "main.js.map": "/aviasales/static/js/main.454a7e1f.chunk.js.map",
     "runtime-main.js": "/aviasales/static/js/runtime-main.4c2a4337.js",
     "runtime-main.js.map": "/aviasales/static/js/runtime-main.4c2a4337.js.map",
     "static/js/2.673544e4.chunk.js": "/aviasales/static/js/2.673544e4.chunk.js",
     "static/js/2.673544e4.chunk.js.map": "/aviasales/static/js/2.673544e4.chunk.js.map",
     "index.html": "/aviasales/index.html",
-    "precache-manifest.b7165061c2a864033ac3ae410cac6c75.js": "/aviasales/precache-manifest.b7165061c2a864033ac3ae410cac6c75.js",
+    "precache-manifest.7a8be899570d91ec69fe9159e898571d.js": "/aviasales/precache-manifest.7a8be899570d91ec69fe9159e898571d.js",
     "service-worker.js": "/aviasales/service-worker.js",
     "static/js/2.673544e4.chunk.js.LICENSE": "/aviasales/static/js/2.673544e4.chunk.js.LICENSE",
     "static/media/logo.0c089234.svg": "/aviasales/static/media/logo.0c089234.svg",
@@ -17,6 +17,6 @@
   "entrypoints": [
     "static/js/runtime-main.4c2a4337.js",
     "static/js/2.673544e4.chunk.js",
-    "static/js/main.dbdb5d6f.chunk.js"
+    "static/js/main.454a7e1f.chunk.js"
   ]
 }
