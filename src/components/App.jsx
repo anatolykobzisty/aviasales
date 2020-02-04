@@ -38,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 12px;
     line-height: 18px;
     color: #4A4A4A;
-    background-color: red;
+    background-color: #E5E5E5;
   }
 
   * {
