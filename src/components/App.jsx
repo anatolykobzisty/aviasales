@@ -28,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
   }
   
   body {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-weight: 600;          
     max-width: 754px;
     min-height: 100%;
@@ -38,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 12px;
     line-height: 18px;
     color: #4A4A4A;
-    background-color: #E5E5E5;
+    background-color: red;
   }
 
   * {
