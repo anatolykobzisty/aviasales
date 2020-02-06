@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 
@@ -44,25 +45,38 @@ const Icon = styled.svg`
   fill: ${props => (props.checked ? '#2196f3' : 'transparent')};
 `;
 
-const Option = ({ label, value, checked, onChange }) => (
-  <StyledOption>
-    <Label>
-      <HiddenCheckbox value={value} checked={checked} onChange={onChange} />
-      <VisibleCheckbox checked={checked}>
-        <Icon width="12" height="8" viewBox="0 0 12 8" checked={checked}>
-          <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
-        </Icon>
-      </VisibleCheckbox>
-      {label}
-    </Label>
-  </StyledOption>
-);
+class Option extends PureComponent {
+  handleChange = event => {
+    const { handleChangeOption, value } = this.props;
+    const { checked } = event.target;
+    handleChangeOption(value, checked);
+  };
+
+  render() {
+    const { label, value, checked } = this.props;
+    return (
+      <>
+        <StyledOption>
+          <Label>
+            <HiddenCheckbox value={value} checked={checked} onChange={this.handleChange} />
+            <VisibleCheckbox checked={checked}>
+              <Icon width="12" height="8" viewBox="0 0 12 8" checked={checked}>
+                <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
+              </Icon>
+            </VisibleCheckbox>
+            {label}
+          </Label>
+        </StyledOption>
+      </>
+    );
+  }
+}
 
 Option.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
+  handleChangeOption: PropTypes.func.isRequired,
 };
 
 export default Option;

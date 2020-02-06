@@ -142,14 +142,15 @@ class Main extends Component {
     this.setState({ filteredTickets: sortedTickets });
   };
 
-  handleChangeOption = value => event => {
-    const { checked } = event.target;
+  handleChangeOption = (value, enabled) => {
     const { checkedOptions } = this.state;
-    if (checked) {
+    if (enabled) {
       this.setState({ checkedOptions: [...checkedOptions, value] }, this.filterTickets);
     } else {
       this.setState(
-        { checkedOptions: checkedOptions.filter(item => item !== value) },
+        {
+          checkedOptions: checkedOptions.filter(checkedOptionValue => checkedOptionValue !== value),
+        },
         this.filterTickets
       );
     }
@@ -188,7 +189,7 @@ class Main extends Component {
                     label={label}
                     value={value}
                     checked={checkedOptions.includes(value)}
-                    onChange={this.handleChangeOption(value)}
+                    handleChangeOption={this.handleChangeOption}
                   />
                 ))}
               </Options>
