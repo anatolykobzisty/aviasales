@@ -83,7 +83,7 @@ class Ticket extends PureComponent {
           </Headline>
           {segments.map(({ origin, destination, date, stops, duration }) => {
             return (
-              <Row key={`${Date.parse(date)}`}>
+              <Row key={date}>
                 <Column>
                   <Title>
                     {origin} – {destination}
