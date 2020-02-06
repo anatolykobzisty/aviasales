@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 
@@ -36,16 +36,33 @@ const RightButton = styled(Button)`
   border-left: 0px;
 `;
 
-const SortControl = ({ sortBy, handleChangeSortControl }) => (
-  <StyledSortControl>
-    <LeftButton active={sortBy === 'cheapness'} onClick={handleChangeSortControl('cheapness')}>
-      Самый дешевый
-    </LeftButton>
-    <RightButton active={sortBy === 'speed'} onClick={handleChangeSortControl('speed')}>
-      Самый быстрый
-    </RightButton>
-  </StyledSortControl>
-);
+class SortControl extends PureComponent {
+  handleClick = event => {
+    const { handleChangeSortControl } = this.props;
+    const nameButton = event.target.getAttribute('aria-label');
+    handleChangeSortControl(nameButton);
+  };
+
+  render() {
+    const { sortBy } = this.props;
+    return (
+      <>
+        <StyledSortControl>
+          <LeftButton
+            active={sortBy === 'cheapness'}
+            aria-label="cheapness"
+            onClick={this.handleClick}
+          >
+            Самый дешевый
+          </LeftButton>
+          <RightButton active={sortBy === 'speed'} aria-label="speed" onClick={this.handleClick}>
+            Самый быстрый
+          </RightButton>
+        </StyledSortControl>
+      </>
+    );
+  }
+}
 
 SortControl.propTypes = {
   sortBy: PropTypes.string.isRequired,

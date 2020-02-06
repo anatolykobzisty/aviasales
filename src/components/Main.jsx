@@ -205,7 +205,7 @@ class Main extends Component {
     }
   };
 
-  handleChangeSortControl = sortBy => () => {
+  handleChangeSortControl = sortBy => {
     this.setState({ sortBy }, this.sortTickets);
   };
 
