@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components/macro';
 import axios from 'axios';
 
+import AllOptions from './AllOptions';
 import Option from './Option';
 import SortControl from './SortControl';
 import Ticket from './Ticket';
@@ -44,48 +45,6 @@ const Form = styled.form`
 `;
 
 const Options = styled.ul``;
-
-const AllOptions = styled.li``;
-
-const Label = styled.label`
-  display: flex;
-  height: 40px;
-  align-items: center;
-  cursor: pointer;
-  :hover {
-    background-color: #f1fcff;
-  }
-`;
-
-const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
-  border: 0;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-`;
-
-const VisibleCheckbox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 20px;
-  height: 20px;
-  margin-left: 20px;
-  margin-right: 10px;
-  border: 1px solid;
-  border-color: ${props => (props.checked ? '#2196f3' : '#9abbce')};
-  border-radius: 2px;
-`;
-
-const Icon = styled.svg`
-  fill: ${props => (props.checked ? '#2196f3' : 'transparent')};
-`;
 
 const Container = styled.div``;
 
@@ -196,9 +155,8 @@ class Main extends Component {
     }
   };
 
-  handleChangeAllOptions = event => {
-    const { checked } = event.target;
-    if (checked) {
+  handleChangeAllOptions = enabled => {
+    if (enabled) {
       this.setState({ checkedOptions: [0, 1, 2, 3] }, this.filterTickets);
     } else {
       this.setState({ checkedOptions: [] }, this.filterTickets);
@@ -219,26 +177,11 @@ class Main extends Component {
             <Title>Количество пересадок</Title>
             <Form>
               <Options>
-                <AllOptions>
-                  <Label>
-                    <HiddenCheckbox
-                      name="all"
-                      checked={checkedOptions.length === OPTIONS.length}
-                      onChange={this.handleChangeAllOptions}
-                    />
-                    <VisibleCheckbox checked={checkedOptions.length === OPTIONS.length}>
-                      <Icon
-                        width="12"
-                        height="8"
-                        viewBox="0 0 12 8"
-                        checked={checkedOptions.length === OPTIONS.length}
-                      >
-                        <path d="M4.28571 8L0 4.16123L1.20857 3.0787L4.28571 5.82726L10.7914 0L12 1.09021L4.28571 8Z" />
-                      </Icon>
-                    </VisibleCheckbox>
-                    Все
-                  </Label>
-                </AllOptions>
+                <AllOptions
+                  options={OPTIONS}
+                  checkedOptions={checkedOptions}
+                  handleChangeAllOptions={this.handleChangeAllOptions}
+                />
                 {OPTIONS.map(({ key, label, value }) => (
                   <Option
                     key={key}
