@@ -45,7 +45,7 @@ const Icon = styled.svg`
 `;
 
 class AllOptions extends PureComponent {
-  handleClick = event => {
+  handleChange = event => {
     const { handleChangeAllOptions } = this.props;
     const { checked } = event.target;
     handleChangeAllOptions(checked);
@@ -60,7 +60,7 @@ class AllOptions extends PureComponent {
             <HiddenCheckbox
               name="all"
               checked={checkedOptions.length === options.length}
-              onChange={this.handleClick}
+              onChange={this.handleChange}
             />
             <VisibleCheckbox checked={checkedOptions.length === options.length}>
               <Icon
