@@ -2,8 +2,6 @@ import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import styled from 'styled-components/macro';
 import styledNormalize from 'styled-normalize';
-import OpenSansRegular from '../fonts/opensans-regular.woff';
-import OpenSansSemiBold from '../fonts/opensans-semibold.woff';
 
 import Header from './Header';
 import Main from './Main';
@@ -11,22 +9,6 @@ import Main from './Main';
 const GlobalStyle = createGlobalStyle`
   ${styledNormalize}
 
-  @font-face {
-    font-family: 'Open Sans';
-    src: url(${OpenSansSemiBold});
-    font-display: swap;
-    font-weight: 600;          
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'Open Sans';
-    src: url(${OpenSansRegular});
-    font-display: swap;
-    font-weight: normal;          
-    font-style: normal;
-  }
-  
   body {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;          
